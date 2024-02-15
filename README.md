@@ -1,58 +1,38 @@
 # Android-OpenJDK-Build
  Build and packaging script for building OpenJDK, used for FoldCraftLauncher
 
-## References
- http://openjdk.java.net/projects/mobile/android.html
-
- https://github.com/PojavLauncherTeam/android-openjdk-build-multiarch
-
-## Currently supported JDK
-<table>
-    <thead>
-        <tr>
-            <th align="center">JDK</th>
-            <th align="center">Branch</th>
-            <th align="center">aarch64</th>
-            <th align="center">arm</th>
-            <th align="center">x86</th>
-            <th align="center">x86_64</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td align="center">1.8</td>
-            <th align="center">Build_JRE_8</th>
-            <td align="center">√</td>
-            <td align="center">√</td>
-            <td align="center">√</td>
-            <td align="center">√</td>
-        </tr>
-        <tr>
-            <td align="center">11</td>
-            <th align="center">Build_JRE_11</th>
-            <td align="center">√</td>
-            <td align="center">√</td>
-            <td align="center">×</td>
-            <td align="center">√</td>
-        </tr>
-        <tr>
-            <td align="center">17</td>
-            <th align="center">Build_JRE_17</th>
-            <td align="center">√</td>
-            <td align="center">√</td>
-            <td align="center">√</td>
-            <td align="center">√</td>
-        </tr>
-        <tr>
-            <td align="center">21</td>
-            <th align="center">Build_JRE_21</th>
-            <td align="center">√</td>
-            <td align="center">√</td>
-            <td align="center">√</td>
-            <td align="center">√</td>
-        </tr>
-    </tbody>
-</table>
+## Branch information
+ This branch is used to compile JRE 8.
 
 ## Setup and Build
-See README of the corresponding branch.
+ Use Android NDK to build.
+
+### Setup
+- Download Android NDK r10e.
+- **Warning**: Do not attempt to build use newer or older NDK, it will lead to compilation errors.
+
+### Build
+ Run in this directory:
+```
+export BUILD_FREETYPE_VERSION=[2.6.2/.../2.10.0] # default: 2.10.0
+export JDK_DEBUG_LEVEL=[release/fastdebug/debug] # default: release
+export JVM_VARIANTS=[client/server] # default: client (aarch32), server (other architectures)
+
+# Setup NDK, run once
+./extract_ndk.sh
+./make_toolchain.sh
+
+# Get CUPS, Freetype and build Freetype
+./get_libs.sh
+./build_libs.sh
+
+# Clone JDK, run once
+./clone_jdk.sh
+
+# Configure JDK and build
+./build_jdk.sh
+
+# Pack the built JDK
+./remove_jdk_debug_info.sh
+./tar_jdk.sh
+```

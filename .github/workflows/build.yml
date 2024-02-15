@@ -1,0 +1,74 @@
+name: Build OpenJDK 8 for Android
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build_android:
+    strategy:
+      matrix:
+        arch: [ "aarch32", "aarch64", "x86", "x86_64" ]
+      fail-fast: false
+
+    name: "Build for Android ${{matrix.arch}}"
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: set up JDK 1.7
+      uses: actions/setup-java@v4
+      with:
+        java-version: 7
+        distribution: zulu
+
+    - name: Build with CI build script
+      run: bash "ci_build_arch_${{matrix.arch}}.sh"
+
+    - name: Upload JRE build output
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'jre8-${{matrix.arch}}'
+        path: jre8*.tar.xz
+
+  fcl:
+    needs: build_android
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Get jre8-aarch32
+      uses: actions/download-artifact@v4
+      with:
+        name: jre8-aarch32
+        path: fcl
+
+    - name: Get jre8-aarch64
+      uses: actions/download-artifact@v4
+      with:
+        name: jre8-aarch64
+        path: fcl
+
+    - name: Get jre8-x86
+      uses: actions/download-artifact@v4
+      with:
+        name: jre8-x86
+        path: fcl
+
+    - name: Get jre8-x86_64
+      uses: actions/download-artifact@v4
+      with:
+        name: jre8-x86_64
+        path: fcl
+
+    - name: Repack JRE
+      run: bash "repack_jre.sh" $GITHUB_WORKSPACE/fcl $GITHUB_WORKSPACE/fcl/jre8-multiarch
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+          name: jre8-multiarch
+          path: fcl/jre8-multiarch/*
