@@ -1,5 +1,5 @@
 # Android-OpenJDK-Build
- Build and packaging script for building OpenJDK, used for FoldCraftLauncher
+ Build and packaging script for building OpenJDK, used for FoldCraftLauncher.
 
 ## Branch information
  This branch is used to compile JRE 21.
