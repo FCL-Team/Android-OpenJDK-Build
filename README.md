@@ -32,7 +32,7 @@
             <th align="center">Build_JRE_11</th>
             <td align="center">√</td>
             <td align="center">√</td>
-            <td align="center">×</td>
+            <td align="center">√</td>
             <td align="center">√</td>
         </tr>
         <tr>
