@@ -1,5 +1,5 @@
 # Android-OpenJDK-Build
- Build and packaging script for building OpenJDK, used for FoldCraftLauncher
+ Build and packaging script for building OpenJDK, used for FoldCraftLauncher.
 
 ## References
  http://openjdk.java.net/projects/mobile/android.html
