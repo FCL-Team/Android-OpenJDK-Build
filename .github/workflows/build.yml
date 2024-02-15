@@ -1,0 +1,16 @@
+name: Build OpenJDK for Android
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+  alert:
+    strategy:
+      fail-fast: false
+    name: "Alert"
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Please use the workflow of the corresponding branch
+      uses: actions/checkout@v4
