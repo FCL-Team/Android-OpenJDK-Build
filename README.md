@@ -51,6 +51,15 @@
             <td align="center">√</td>
             <td align="center">√</td>
         </tr>
+        <tr>
+            <td align="center">25</td>
+            <th align="center">Build_JRE_25</th>
+            <td align="center">√</td>
+            <td align="center">√</td>
+            <td align="center">-</td>
+            <td align="center">√</td>
+        </tr>
+
     </tbody>
 </table>
 
