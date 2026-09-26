@@ -1,0 +1,47 @@
+diff --git a/src/java.base/unix/native/libnio/fs/UnixNativeDispatcher.c b/src/java.base/unix/native/libnio/fs/UnixNativeDispatcher.c
+index ce19482c3..5092043b7 100644
+--- a/src/java.base/unix/native/libnio/fs/UnixNativeDispatcher.c
++++ b/src/java.base/unix/native/libnio/fs/UnixNativeDispatcher.c
+@@ -254,6 +254,42 @@ static futimesat_func* my_futimesat_func = NULL;
+ static futimens_func* my_futimens_func = NULL;
+ static lutimes_func* my_lutimes_func = NULL;
+ static fdopendir_func* my_fdopendir_func = NULL;
++static utimensat_func* my_utimensat_func = NULL;
++
++#ifdef __ANDROID__
++/*
++ * TODO: Android lacks support for the methods listed below. In its place are
++ * alternatives that use existing Android functionality, but lack reentrant
++ * support. Determine if the following are the most suitable alternatives.
++ *
++ */
++int getgrgid_r(gid_t gid, struct group* grp, char* buf, size_t buflen, struct group** result) {
++
++  *result = NULL;
++  errno = 0;
++  grp = getgrgid(gid);
++  if (grp == NULL) {
++        return errno;
++  }
++  // buf not used by caller (see below)
++  *result = grp;
++  return 0;
++}
++
++int getgrnam_r(const char *name, struct group* grp, char* buf, size_t buflen, struct group** result) {
++
++  *result = NULL;
++  errno = 0;
++  grp = getgrnam(name);
++  if (grp == NULL) {
++        return errno;
++  }
++  // buf not used by caller (see below)
++  *result = grp;
++  return 0;
++
++}
++#endif
+ #if defined(__linux__)
+ static statx_func* my_statx_func = NULL;
+ #endif
