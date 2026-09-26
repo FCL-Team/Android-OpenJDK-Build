@@ -1,7 +1,16 @@
 diff --git a/src/java.base/unix/native/libnio/fs/UnixNativeDispatcher.c b/src/java.base/unix/native/libnio/fs/UnixNativeDispatcher.c
-index ce19482c3..5092043b7 100644
+index ce19482c3..9bfa8f788 100644
 --- a/src/java.base/unix/native/libnio/fs/UnixNativeDispatcher.c
 +++ b/src/java.base/unix/native/libnio/fs/UnixNativeDispatcher.c
+@@ -79,7 +79,7 @@
+ // by defining binary compatible statx structs in this file and
+ // not relying on included headers.
+ 
+-#ifndef __GLIBC__
++#if !defined(__GLIBC__) && !defined(__ANDROID__)
+ // Alpine doesn't know these types, define them
+ typedef unsigned int       __uint32_t;
+ typedef unsigned short     __uint16_t;
 @@ -254,6 +254,42 @@ static futimesat_func* my_futimesat_func = NULL;
  static futimens_func* my_futimens_func = NULL;
  static lutimes_func* my_lutimes_func = NULL;
