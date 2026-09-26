@@ -1,0 +1,14 @@
+diff --git a/make/hotspot/lib/JvmOverrideFiles.gmk b/make/hotspot/lib/JvmOverrideFiles.gmk
+index 441c553fb..3b80d653c 100644
+--- a/make/hotspot/lib/JvmOverrideFiles.gmk
++++ b/make/hotspot/lib/JvmOverrideFiles.gmk
+@@ -153,3 +153,9 @@ else ifeq ($(call isTargetOs, windows), true)
+   BUILD_LIBJVM_jvmciCompilerToVMInit.cpp_OPTIMIZATION := NONE
+ 
+ endif
++
++# NDK r21 clang 9 miscompiles memnode.cpp at -O3 on aarch64
++# (zero-extension elision corrupts InitializeNode::coalesce_subword_stores)
++ifeq ($(call isTargetOs, linux), true)
++  BUILD_LIBJVM_memnode.cpp_CXXFLAGS := -O1
++endif

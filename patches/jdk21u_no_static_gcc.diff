@@ -1,0 +1,13 @@
+diff --git a/make/autoconf/lib-std.m4 b/make/autoconf/lib-std.m4
+index e470cdbe6..9ce21d282 100644
+--- a/make/autoconf/lib-std.m4
++++ b/make/autoconf/lib-std.m4
+@@ -47,7 +47,7 @@ AC_DEFUN_ONCE([LIB_SETUP_STD_LIBS],
+   if test "x$OPENJDK_TARGET_OS" = xlinux; then
+     # Test if stdc++ can be linked statically.
+     AC_MSG_CHECKING([if static link of stdc++ is possible])
+-    STATIC_STDCXX_FLAGS="-static-libstdc++ -static-libgcc"
++    STATIC_STDCXX_FLAGS="-static-libstdc++"
+     AC_LANG_PUSH(C++)
+     OLD_LIBS="$LIBS"
+     LIBS="$STATIC_STDCXX_FLAGS"

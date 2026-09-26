@@ -44,9 +44,21 @@ ln -s -f $CUPS_DIR/cups $ANDROID_INCLUDE/
 
 cd openjdk
 
-# Apply patches
-git reset --hard
-git apply --reject --whitespace=fix ../patches/jdk21u_android.diff || echo "git apply failed (Android patch set)"
+# Apply patches. Each fix lives in its own file under patches/, in the
+# spirit of termux-packages' per-package patch sets.
+#
+# The Android patch set is applied with GNU patch instead of git apply:
+# the jdk21u branch can drift from the revision the diff was authored
+# against, and git apply rejects whole files over minor context offsets
+# while patch --fuzz absorbs them.
+git reset --hard && git clean -df src/ > /dev/null
+patch -p1 --fuzz=6 --no-backup-if-mismatch < ../patches/jdk21u_android.diff
+# glibc >= 2.42 exposes the C23 uabs(int), clashing with hotspot's static one
+git apply --whitespace=fix ../patches/jdk21u_c23_uabs.diff
+# NDK r21 clang resolves -static-libgcc to GCC 4.9 libgcc_real.a (dl_iterate_phdr)
+git apply --whitespace=fix ../patches/jdk21u_no_static_gcc.diff
+# clang 9 miscompiles InitializeNode::coalesce_subword_stores at -O3
+git apply --whitespace=fix ../patches/jdk21u_memnode_o1.diff
 
 bash ./configure \
     --with-boot-jdk=$BOOT_JDK \
@@ -75,7 +87,7 @@ if [[ "$error_code" -ne 0 ]]; then
   exit $error_code
 fi
 
-jobs=4
+jobs=${JOBS:-4}
 
 cd build/${JVM_PLATFORM}-${TARGET_JDK}-${JVM_VARIANTS}-${JDK_DEBUG_LEVEL}
 make JOBS=$jobs images || \

@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 . set_devkit_path.sh
+export LD=/usr/bin/ld
+export lt_cv_path_LD=/usr/bin/ld
 cd freetype-$BUILD_FREETYPE_VERSION
 
 echo "Building Freetype"
@@ -11,7 +13,7 @@ export PATH=$TOOLCHAIN/bin:$PATH
   --prefix=${PWD}/build_android-${TARGET_SHORT} \
   --without-zlib \
   --with-png=no \
-  --with-harfbuzz=no $EXTRA_ARGS \
+  --with-harfbuzz=no --with-bzip2=no $EXTRA_ARGS \
   || error_code=$?
 
 if [[ "$error_code" -ne 0 ]]; then
