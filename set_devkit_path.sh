@@ -25,13 +25,12 @@ fi
 export JVM_PLATFORM=linux
 # Set NDK
 export API=21
-if [[ -z "$ANDROID_NDK_ROOT" ]]; then
-  export NDK=$PWD/android-ndk-$NDK_VERSION
-  export ANDROID_NDK_ROOT=$NDK
-else
-  export NDK_USE_EXISTING=1
-  export NDK=$ANDROID_NDK_ROOT
-fi
+# Always use the NDK this repository downloads (r21). The build does not
+# work with any other NDK (see README), and CI runner images preinstall
+# their own NDK and export ANDROID_NDK_ROOT, which would silently hijack
+# the toolchain here.
+export NDK=$PWD/android-ndk-$NDK_VERSION
+export ANDROID_NDK_ROOT=$NDK
 export TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/linux-x86_64
 
 export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
